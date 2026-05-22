@@ -16,9 +16,9 @@ Search and compare AI/LLM models across providers by pricing, context window, re
 | Styling       | Tailwind CSS 4 (with `@theme` tokens)                                         |
 | Fonts         | Trocchi (headings), Space Grotesk (body), JetBrains Mono (code) via next/font |
 | Table         | @tanstack/react-table                                                         |
-| UI primitives | Radix UI (Select, Slider, Dialog, Popover, Tooltip), CMDK                     |
+| UI primitives | Radix UI (Select, Slider, Tooltip, Slot), CMDK (Combobox pattern only)        |
 | Icons         | lucide-react                                                                  |
-| Class utils   | clsx + class-variance-authority                                               |
+| Class utils   | clsx + tailwind-merge + class-variance-authority                              |
 | Lint          | ESLint 9 flat config + prettier                                               |
 | Git hooks     | husky + commitlint (conventional commits)                                     |
 
@@ -30,12 +30,15 @@ Search and compare AI/LLM models across providers by pricing, context window, re
 
 ```
 Server Component (page.tsx)
-  └─ fetchModels() → fetch("https://models.dev/api.json")
+  └─ fetchRawData() → fetch("https://models.dev/api.json")
+  └─ parseProviderModels() → transformModel() for each entry
   └─ passes Model[] to <ModelFinder initialModels={models} />
 
 Client Component (ModelFinder.tsx)
   └─ useFilters() hook → FilterState
   └─ applyFilters(models, filters) → filtered list
+       └─ filterBySearch() · filterByExactMatch() · filterByCost()
+       └─ filterByContext() · filterByKnowledgeYear() · filterByReleaseYear()
   └─ Pagination (client-side)
   └─ <ModelTable /> (TanStack Table, sortable)
 ```
@@ -54,45 +57,69 @@ Client Component (ModelFinder.tsx)
 
 ```
 <RootLayout>
-  <Header />            — site title, link to models.dev
+  <Header />                          — site title + github link
   <Home (server)>
     <ErrorBoundary>
-      <ModelFinder>     — 'use client'
-        <SearchInput /> — debounced (300ms)
-        <FilterPanel /> — providers, families, modalities, cost ranges, etc.
-        <ResultsSummaryBar /> — count + per-page selector
-        <ResultsTableSection>
-          <ModelTable /> — TanStack Table, sortable, ~25 columns
-        </ResultsTableSection>
-        <PaginationControls /> — sticky bottom
+      <ModelFinder>                   — 'use client', main orchestrator
+        <Container>
+          <div class="grid 2-col">
+            <div class="left-col">
+              <ResultsSummaryBar />    — count + per-page selector
+              <ResultsTableSection>
+                <ModelTable />         — TanStack table, ~23 columns
+                  renderTableHeader()
+                  renderTableBody()
+                  column factories: providerColumn, nameColumn, costColumn,
+                    booleanBadgeColumn, modalityColumn, limitColumn, textColumn
+              </ResultsTableSection>
+              <PaginationControls />  — sticky bottom with PageButton
+            </div>
+            <div class="right-col sticky">
+              <SearchInput />          — debounced (300ms)
+              <FilterPanel>
+                sections:
+                  SelectFiltersSection       — provider, family, modality
+                  BooleanFiltersSection      — toolCall, reasoning, free (uses renderBooleanSelect)
+                  RangeFiltersSection        — input/output cost, context window, years
+                    PriceRangeSlider + RangeInputs
+                    YearSelectFilter
+                filters:
+                  FilterGroup
+                  PriceRangeSlider
+                  SearchableSelect
+                  constants/rangeFilters
+              </FilterPanel>
+            </div>
+          </div>
+        </Container>
       </ModelFinder>
     </ErrorBoundary>
     <SeoContent>
       <HeroSection />
       <IntroSection />
-      <PopularSearchesSection />
     </SeoContent>
   </Home>
-  <Footer />            — credits, links
+  <Footer />                           — credits, links
 </RootLayout>
 ```
 
 ### Key components
 
-| Path                                     | Purpose                                                                    |
-| ---------------------------------------- | -------------------------------------------------------------------------- |
-| `src/types/models.ts`                    | `Model`, `FilterState`, `ApiResponse` interfaces                           |
-| `src/hooks/useFilters.ts`                | Filter state management hook                                               |
-| `src/utils/filters.ts`                   | `applyFilters()`, `parseUrlParams()`, `buildUrlParams()`                   |
-| `src/utils/formatters.ts`                | `formatCost()`, `formatNumber()`, `formatDate()`, `extractYear()`          |
-| `src/utils/pagination/index.ts`          | `getTotalPages()`, `getStartIndex()`, `getEndIndex()`, `getVisiblePages()` |
-| `src/utils/validators.ts`                | Input sanitization helpers                                                 |
-| `src/components/filters/FilterPanel.tsx` | All filter controls in sidebar                                             |
-| `src/components/table/ModelTable.tsx`    | TanStack table with all columns                                            |
-| `src/components/seo/`                    | SEO content sections (hero, intro, popular searches)                       |
-| `src/components/ui/`                     | Design system primitives (Button, Select, Slider, Tooltip, Combobox)       |
-| `src/config/metadata.ts`                 | Next.js Metadata + OpenGraph + Twitter card                                |
-| `src/config/fonts.ts`                    | Font loading configuration                                                 |
+- `src/types/models.ts` — `Model`, `FilterState`, `ApiResponse` interfaces
+- `src/hooks/useFilters.ts` — Filter state management hook
+- `src/utils/filters.ts` — `applyFilters()` and filter predicates (`filterBySearch`, `filterByExactMatch`, `filterByCost`, `filterByContext`, `filterByKnowledgeYear`, `filterByReleaseYear`), plus `booleanValue()`, `booleanDisplay()`
+- `src/utils/formatters.ts` — `formatCost()`, `formatNumber()`, `extractYear()`
+- `src/components/filters/FilterPanel.tsx` — All filter controls in sidebar
+- `src/components/filters/PriceRangeSlider.tsx` — Price/context range slider with `RangeInputs` sub-component
+- `src/components/filters/sections/BooleanFiltersSection.tsx` — `renderBooleanSelect()` helper for yes/no/any selects
+- `src/components/filters/sections/RangeFiltersSection.tsx` — `PriceRangeFilter` + `YearSelectFilter` helpers
+- `src/components/table/ModelTable.tsx` — TanStack table with `renderTableHeader()`, `renderTableBody()`, column factories (`providerColumn`, `nameColumn`, `costColumn`, `booleanBadgeColumn`, `modalityColumn`, `limitColumn`, `textColumn`)
+- `src/components/model-finder/PaginationControls.tsx` — `PageButton` sub-component for page navigation
+- `src/components/seo/` — SEO content sections (hero, intro)
+- `src/components/ui/` — Design system primitives (Button, Select, Slider, Tooltip, Combobox, CopyButton, BulletList)
+- `src/components/ui/Combobox.tsx` — Searchable combobox with `ComboboxDropdown` sub-component
+- `src/config/metadata.ts` — Next.js Metadata + OpenGraph + Twitter card
+- `src/config/fonts.ts` — Font loading configuration
 
 ---
 
@@ -119,6 +146,74 @@ Client Component (ModelFinder.tsx)
 - File names: PascalCase for components, camelCase for utilities.
 - Barrel exports from `src/utils/index.ts`.
 - All commits must follow conventional commits (enforced by commitlint + husky).
+- **Package manager: `bun` only.** Never use `npm` or `npx`. Use `bun add`, `bun remove`, `bunx`, `bun run`.
+- **Never use `npx`** — use `bunx` instead (e.g. `bunx tsc --noEmit`, `bunx depcheck`).
+- **Never run sensitive git commands** — no `git push`, `git pull`, `git reset`, `git stash`, `git rebase`, `git merge`, or force-push operations.
+- Only stage and commit changes; leave remote operations to the user.
+
+---
+
+## JSDoc Style Rules
+
+All JSDoc must follow these exact patterns. Consistency is enforced.
+
+### Functions & Components
+
+```ts
+/**
+ * Brief description of what the function/component does.
+ * Use present tense, third person.
+ *
+ * @param {Type} paramName - Description of the parameter.
+ * @param {Type} [optionalParam] - Optional parameter description.
+ *
+ * @returns {Type} Description of the return value.
+ */
+```
+
+- **@param** — One per parameter, type in `{}`, name, dash, description.
+- **Optional params** use `[]` brackets, e.g. `[className]`.
+- **@returns** — Always include the return type and description.
+- Components that return JSX use `{JSX.Element}` as the return type.
+- Always include a blank line between `@param` block, `@returns`, and the description.
+
+### Interfaces
+
+```ts
+/**
+ * Props for ComponentName component.
+ *
+ * @interface ComponentNameProps
+ * @property {Type} propName - Description of the property.
+ * @property {Type} [optionalProp] - Description of optional property.
+ */
+interface ComponentNameProps {
+  propName: Type;
+  optionalProp?: Type;
+}
+```
+
+- **@interface** — Matches the interface name.
+- **@property** — One per property, type in `{}`, name, dash, description.
+- **Optional properties** use `[]` brackets.
+
+### Constants & Variables
+
+```ts
+/**
+ * Brief description of the constant's purpose.
+ *
+ * @type {Type}
+ */
+const CONSTANT_NAME: Type = value;
+```
+
+- **@type** — Always specify the type.
+- Constants use PascalCase for exported config, camelCase for local variables.
+
+### Sub-components / Helpers
+
+Helper functions within the same file follow the same function JSDoc rules. Use `@interface` for their props if they accept a params object.
 
 ---
 
@@ -126,9 +221,11 @@ Client Component (ModelFinder.tsx)
 
 | Command            | Purpose                                |
 | ------------------ | -------------------------------------- |
-| `npm run dev`      | Start dev server (Turbopack)           |
-| `npm run build`    | Production build + next-sitemap        |
-| `npm run lint`     | ESLint check                           |
-| `npm run format`   | Prettier format                        |
-| `npm run tsc`      | TypeScript type check                  |
-| `npm run indexnow` | Generate sitemap + run IndexNow script |
+| `bun run dev`      | Start dev server (Turbopack)           |
+| `bun run build`    | Production build + next-sitemap        |
+| `bun run lint`     | ESLint check                           |
+| `bun run format`   | Prettier format                        |
+| `bun run tsc`      | TypeScript type check                  |
+| `bun run indexnow` | Generate sitemap + run IndexNow script |
+
+> **Always use `bun run <script>` or `bunx <command>` — never `npm run` or `npx`.**
