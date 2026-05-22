@@ -1,5 +1,7 @@
 import type { JSX } from 'react';
 
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+
 import { Button } from '@/components/ui/Button';
 import { getVisiblePages } from '@/utils';
 
@@ -44,14 +46,21 @@ export function PaginationControls({
 
   return (
     <div className="flex flex-col gap-3 bg-black px-4 py-2 text-white md:flex-row md:items-center md:justify-between md:gap-4">
-      <div className="text-xs font-semibold md:text-sm">
+      <div className="hidden text-xs font-semibold md:block md:text-sm">
         Showing <span className="text-primary">{startDisplay}</span>-<span className="text-primary">{endDisplay}</span>{' '}
         of <span className="text-primary">{totalCount}</span> models
       </div>
 
-      <div className="flex flex-wrap items-center gap-1 md:gap-2">
-        <Button variant="white" size="sm" onClick={() => onPageChange(1)} disabled={isFirstPage}>
-          First
+      <div className="flex flex-wrap items-center justify-center gap-2 md:justify-end">
+        <Button
+          variant="white"
+          size="sm"
+          onClick={() => onPageChange(1)}
+          disabled={isFirstPage}
+          aria-label="First"
+          className="min-w-8 px-1"
+        >
+          <ChevronsLeft className="h-4 w-4" role="img" />
         </Button>
 
         <Button
@@ -59,8 +68,10 @@ export function PaginationControls({
           size="sm"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={isFirstPage}
+          aria-label="Previous"
+          className="min-w-8 px-1"
         >
-          Prev
+          <ChevronLeft className="h-4 w-4" role="img" />
         </Button>
 
         <div className="flex items-center gap-1 md:gap-2">
@@ -94,12 +105,21 @@ export function PaginationControls({
           size="sm"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={isLastPage}
+          aria-label="Next"
+          className="min-w-8 px-1"
         >
-          Next
+          <ChevronRight className="h-4 w-4" role="img" />
         </Button>
 
-        <Button variant="white" size="sm" onClick={() => onPageChange(totalPages)} disabled={isLastPage}>
-          Last
+        <Button
+          variant="white"
+          size="sm"
+          onClick={() => onPageChange(totalPages)}
+          disabled={isLastPage}
+          aria-label="Last"
+          className="min-w-8 px-1"
+        >
+          <ChevronsRight className="h-4 w-4" role="img" />
         </Button>
       </div>
     </div>
