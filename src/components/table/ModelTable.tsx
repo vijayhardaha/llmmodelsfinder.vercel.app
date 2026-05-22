@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
-import type { JSX } from 'react';
+import { useMemo, useState, type JSX } from 'react';
 
 import type { ColumnDef, Row, SortingState } from '@tanstack/react-table';
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 
+import { CopyButton } from '@/components/ui/CopyButton';
 import { BooleanBadgeCell } from '@/components/table/cells/BooleanBadgeCell';
 import { CostCell, CostHeader } from '@/components/table/cells/CostCell';
 import { ModalityCell } from '@/components/table/cells/ModalityCell';
@@ -107,7 +107,10 @@ function getModelColumns(): ColumnDef<Model>[] {
       cell: ({ row }) => (
         <div>
           <div className="font-bold">{row.original.name}</div>
-          <div className="text-text-muted font-mono text-[10px]">{row.original.id}</div>
+          <div className="text-text-muted inline-flex items-center gap-1 font-mono text-[10px]">
+            {row.original.id}
+            <CopyButton value={row.original.id} />
+          </div>
         </div>
       ),
     },
@@ -201,8 +204,8 @@ function getModelColumns(): ColumnDef<Model>[] {
 export function ModelTable({ data, perPage = 15, currentPage = 1, onSortingChange }: ModelTableProps): JSX.Element {
   'use no memo';
 
-  const [sorting, setSorting] = React.useState<SortingState>([{ id: 'provider', desc: false }]);
-  const columns = React.useMemo(() => getModelColumns(), []);
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'provider', desc: false }]);
+  const columns = useMemo(() => getModelColumns(), []);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({

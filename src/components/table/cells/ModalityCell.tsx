@@ -26,6 +26,7 @@ export function getModalityIcon(modality: string): JSX.Element {
   if (modality === 'video') return <Video className="h-4 w-4 text-black" aria-hidden="true" />;
   if (modality === 'image') return <ImageIcon className="h-4 w-4 text-black" aria-hidden="true" />;
   if (modality === 'pdf') return <FileBox className="h-4 w-4 text-black" aria-hidden="true" />;
+
   return <FileText className="h-4 w-4 text-black" aria-hidden="true" />;
 }
 
