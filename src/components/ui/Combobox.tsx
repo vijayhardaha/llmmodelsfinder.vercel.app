@@ -66,7 +66,6 @@ function ComboboxDropdown({
         placeholder={searchPlaceholder}
         onChange={(e) => onSearchChange(e.target.value)}
         className="w-full border-b-2 border-black px-3 py-2 text-sm focus:outline-none"
-        autoFocus
       />
       <div className="max-h-48 overflow-y-auto">
         {filtered.length === 0 ? (
@@ -140,7 +139,7 @@ export function Combobox({
         className="flex w-full items-center justify-between border-2 border-black bg-white px-3 py-2 text-sm font-medium text-black"
       >
         <span className="truncate">{selectedLabel}</span>
-        <ChevronsUpDown className="h-4 w-4 flex-shrink-0 opacity-50" />
+        <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
       </button>
 
       {open && (
