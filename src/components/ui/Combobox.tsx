@@ -25,6 +25,76 @@ interface ComboboxProps {
 }
 
 /**
+ * Props for ComboboxDropdown sub-component.
+ *
+ * @interface ComboboxDropdownProps
+ * @property {Array<{value: string, label: string}>} filtered - Filtered options to display.
+ * @property {string} value - Current selected value.
+ * @property {(value: string) => void} onValueChange - Callback when value changes.
+ * @property {(open: boolean) => void} onOpenChange - Callback to close the dropdown.
+ * @property {(search: string) => void} onSearchChange - Callback when search input changes.
+ * @property {string} searchPlaceholder - Search input placeholder text.
+ */
+interface ComboboxDropdownProps {
+  filtered: Array<{ value: string; label: string }>;
+  value: string;
+  onValueChange: (value: string) => void;
+  onOpenChange: (open: boolean) => void;
+  onSearchChange: (search: string) => void;
+  searchPlaceholder: string;
+}
+
+/**
+ * Renders the dropdown list with search input and filtered options.
+ *
+ * @param {ComboboxDropdownProps} props - Component props.
+ *
+ * @returns {JSX.Element} Dropdown element.
+ */
+function ComboboxDropdown({
+  filtered,
+  value,
+  onValueChange,
+  onOpenChange,
+  onSearchChange,
+  searchPlaceholder,
+}: ComboboxDropdownProps): JSX.Element {
+  return (
+    <div className="shadow-neo-md absolute top-full z-50 mt-1 w-full border-2 border-black bg-white">
+      <input
+        type="text"
+        placeholder={searchPlaceholder}
+        onChange={(e) => onSearchChange(e.target.value)}
+        className="w-full border-b-2 border-black px-3 py-2 text-sm focus:outline-none"
+        autoFocus
+      />
+      <div className="max-h-48 overflow-y-auto">
+        {filtered.length === 0 ? (
+          <div className="text-text-muted px-3 py-2 text-sm">No results found</div>
+        ) : (
+          filtered.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => {
+                onValueChange(option.value);
+                onOpenChange(false);
+              }}
+              className={cn(
+                'flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors',
+                value === option.value ? 'bg-primary text-black' : 'text-text hover:bg-background bg-white'
+              )}
+            >
+              <Check className={cn('h-4 w-4', value === option.value ? 'opacity-100' : 'opacity-0')} />
+              <span className="text-left">{option.label}</span>
+            </button>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Searchable combobox component.
  *
  * @param {object} props - Component props
@@ -61,7 +131,6 @@ export function Combobox({
   }, [open]);
 
   const filtered = options.filter((option) => option.label.toLowerCase().includes(search.toLowerCase()));
-
   const selectedLabel = options.find((opt) => opt.value === value)?.label || placeholder;
 
   return (
@@ -75,38 +144,18 @@ export function Combobox({
       </button>
 
       {open && (
-        <div className="shadow-neo-md absolute top-full z-50 mt-1 w-full border-2 border-black bg-white">
-          <input
-            type="text"
-            placeholder={searchPlaceholder}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border-b-2 border-black px-3 py-2 text-sm focus:outline-none"
-          />
-          <div className="max-h-48 overflow-y-auto">
-            {filtered.length === 0 ? (
-              <div className="text-text-muted px-3 py-2 text-sm">No results found</div>
-            ) : (
-              filtered.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => {
-                    onValueChange(option.value);
-                    setOpen(false);
-                    setSearch('');
-                  }}
-                  className={cn(
-                    'flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors',
-                    value === option.value ? 'bg-primary text-black' : 'text-text hover:bg-background bg-white'
-                  )}
-                >
-                  <Check className={cn('h-4 w-4', value === option.value ? 'opacity-100' : 'opacity-0')} />
-                  <span className="text-left">{option.label}</span>
-                </button>
-              ))
-            )}
-          </div>
-        </div>
+        <ComboboxDropdown
+          filtered={filtered}
+          value={value}
+          onValueChange={(nextValue) => {
+            onValueChange(nextValue);
+            setOpen(false);
+            setSearch('');
+          }}
+          onOpenChange={setOpen}
+          onSearchChange={setSearch}
+          searchPlaceholder={searchPlaceholder}
+        />
       )}
     </div>
   );
