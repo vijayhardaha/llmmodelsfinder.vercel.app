@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 
 import { Check, ChevronsUpDown } from 'lucide-react';
 
@@ -42,12 +42,12 @@ export function Combobox({
   onValueChange,
   placeholder = 'Select option...',
   searchPlaceholder = 'Search...',
-}: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState('');
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
+}: ComboboxProps): JSX.Element {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open) return;
 
     function handleClickOutside(event: MouseEvent) {
