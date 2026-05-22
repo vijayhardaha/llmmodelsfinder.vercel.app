@@ -26,6 +26,46 @@ interface PaginationControlsProps {
 }
 
 /**
+ * Props for PaginationButton sub-component.
+ *
+ * @interface PaginationButtonProps
+ * @property {(page: number) => void} onPageChange - Callback for page change.
+ * @property {number | 'ellipsis'} pageItem - Page number or ellipsis indicator.
+ * @property {number} currentPage - Current page number.
+ */
+interface PaginationButtonProps {
+  pageItem: number | 'ellipsis';
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}
+
+/**
+ * Renders a single page button or ellipsis.
+ *
+ * @param {PaginationButtonProps} props - Component props.
+ *
+ * @returns {JSX.Element} Page button or ellipsis span.
+ */
+function PageButton({ pageItem, currentPage, onPageChange }: PaginationButtonProps): JSX.Element {
+  if (pageItem === 'ellipsis') {
+    return <span className="px-2 text-xs font-bold text-white/70">...</span>;
+  }
+
+  return (
+    <button
+      onClick={() => onPageChange(pageItem)}
+      className={`flex h-8 min-w-8 shrink-0 cursor-pointer items-center justify-center border-2 px-1 text-xs font-bold tracking-wider uppercase transition-all ${
+        currentPage === pageItem
+          ? 'border-primary bg-primary text-black'
+          : 'hover:border-primary hover:bg-primary border-white bg-black text-white hover:text-black'
+      }`}
+    >
+      {pageItem}
+    </button>
+  );
+}
+
+/**
  * Bottom sticky pagination controls.
  *
  * @param {PaginationControlsProps} props - Component props.
@@ -75,29 +115,14 @@ export function PaginationControls({
         </Button>
 
         <div className="flex items-center gap-1 md:gap-2">
-          {visiblePages.map((pageItem, index) => {
-            if (pageItem === 'ellipsis') {
-              return (
-                <span key={`ellipsis-${index}`} className="px-2 text-xs font-bold text-white/70">
-                  ...
-                </span>
-              );
-            }
-
-            return (
-              <button
-                key={pageItem}
-                onClick={() => onPageChange(pageItem)}
-                className={`flex h-8 min-w-8 shrink-0 cursor-pointer items-center justify-center border-2 px-1 text-xs font-bold tracking-wider uppercase transition-all ${
-                  currentPage === pageItem
-                    ? 'border-primary bg-primary text-black'
-                    : 'hover:border-primary hover:bg-primary border-white bg-black text-white hover:text-black'
-                }`}
-              >
-                {pageItem}
-              </button>
-            );
-          })}
+          {visiblePages.map((pageItem, index) => (
+            <PageButton
+              key={pageItem === 'ellipsis' ? `ellipsis-${index}` : pageItem}
+              pageItem={pageItem}
+              currentPage={currentPage}
+              onPageChange={onPageChange}
+            />
+          ))}
         </div>
 
         <Button
