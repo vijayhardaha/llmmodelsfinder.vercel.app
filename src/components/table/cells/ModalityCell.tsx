@@ -21,7 +21,7 @@ interface ModalityCellProps {
  *
  * @returns {JSX.Element} Modality icon.
  */
-export function getModalityIcon(modality: string): JSX.Element {
+function getModalityIcon(modality: string): JSX.Element {
   if (modality === 'audio') return <FileMusic className="h-4 w-4 text-black" aria-hidden="true" />;
   if (modality === 'video') return <Video className="h-4 w-4 text-black" aria-hidden="true" />;
   if (modality === 'image') return <ImageIcon className="h-4 w-4 text-black" aria-hidden="true" />;
