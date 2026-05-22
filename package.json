@@ -8,13 +8,13 @@
     "name": "Vijay Hardaha",
     "url": "https://github.com/vijayhardaha/"
   },
-  "homepage": "https://github.com/vijayhardaha/llmmodelsfinder.vercel.app.git",
+  "homepage": "https://github.com/vijayhardaha/findllm.vercel.app.git",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vijayhardaha/llmmodelsfinder.vercel.app.git"
+    "url": "git+https://github.com/vijayhardaha/findllm.vercel.app.git"
   },
   "bugs": {
-    "url": "https://github.com/vijayhardaha/llmmodelsfinder.vercel.app/issues"
+    "url": "https://github.com/vijayhardaha/findllm.vercel.app/issues"
   },
   "scripts": {
     "dev": "next dev --turbopack",

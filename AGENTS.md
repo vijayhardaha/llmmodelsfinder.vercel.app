@@ -2,7 +2,7 @@
 
 Search and compare AI/LLM models across providers by pricing, context window, reasoning, tool support, modalities, and more.
 
-**Site:** https://llmmodelsfinder.vercel.app
+**Site:** https://findllm.vercel.app
 **Data source:** https://models.dev/api.json (fetched server-side on each request)
 
 ---

@@ -14,7 +14,7 @@ const description =
 /**
  * Site URL for LLM Finder.
  */
-const url = 'https://llmmodelsfinder.vercel.app';
+const url = 'https://findllm.vercel.app';
 
 /**
  * Next.js metadata configuration for SEO.

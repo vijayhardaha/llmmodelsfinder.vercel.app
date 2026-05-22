@@ -15,7 +15,7 @@ const { createSitemapConfig } = require('@vijayhardaha/dev-config/next-sitemap')
 /**
  * Live site domain.
  */
-const siteDomain = 'https://llmmodelsfinder.vercel.app';
+const siteDomain = 'https://findllm.vercel.app';
 
 /**
  * Base sitemap configuration from shared dev-config package.
