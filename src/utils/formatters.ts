@@ -21,24 +21,6 @@ export const formatNumber = (num: number): string => {
 };
 
 /**
- * Formats a date string to readable format.
- *
- * @param {string} dateStr - Date string (e.g., "2024-01-15").
- *
- * @returns {string} Formatted date or original string if invalid.
- */
-export const formatDate = (dateStr: string): string => {
-  if (!dateStr || dateStr === 'N/A') return dateStr;
-
-  try {
-    const parsedDate = new Date(dateStr);
-    return parsedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  } catch {
-    return dateStr;
-  }
-};
-
-/**
  * Extracts year from a date string.
  *
  * @param {string} dateStr - Date string (e.g., "2024-01-15").
@@ -49,17 +31,4 @@ export const extractYear = (dateStr: string): number => {
   if (!dateStr || dateStr === 'N/A') return 0;
   const parsedYear = parseInt(dateStr.split('-')[0], 10);
   return Number.isNaN(parsedYear) ? 0 : parsedYear;
-};
-
-/**
- * Escapes HTML special characters to prevent XSS.
- *
- * @param {string} text - Text to escape.
- *
- * @returns {string} Escaped HTML string.
- */
-export const escapeHtml = (text: string): string => {
-  const containerElement = document.createElement('div');
-  containerElement.textContent = text;
-  return containerElement.innerHTML;
 };
