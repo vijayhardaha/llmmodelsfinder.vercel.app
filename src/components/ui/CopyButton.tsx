@@ -1,8 +1,9 @@
 'use client';
 
+import { useCallback, useState, type JSX } from 'react';
+
 import copy from 'copy-to-clipboard';
 import { Check, Copy } from 'lucide-react';
-import { useCallback, useState, type JSX } from 'react';
 
 /**
  * Props for CopyButton component.
