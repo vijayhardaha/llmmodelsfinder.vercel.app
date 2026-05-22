@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type JSX } from 'react';
+import { useEffect, useRef, useState, type JSX, type ChangeEvent } from 'react';
 
 import { Slider } from '@/components/ui/Slider';
 
@@ -26,6 +26,70 @@ interface PriceRangeSliderProps {
   minValue: number;
   maxValue: number;
   label?: string;
+}
+
+/**
+ * Props for RangeInputs sub-component.
+ *
+ * @interface RangeInputsProps
+ * @property {number} min - Minimum allowed value.
+ * @property {number} max - Maximum allowed value.
+ * @property {number} step - Input step value.
+ * @property {[number, number]} draftValues - Current draft min/max values.
+ * @property {(next: [number, number]) => void} onDraftChange - Updates draft values.
+ * @property {(value: number) => void} onMinChange - Callback when min value changes.
+ * @property {(value: number) => void} onMaxChange - Callback when max value changes.
+ */
+interface RangeInputsProps {
+  min: number;
+  max: number;
+  step: number;
+  draftValues: [number, number];
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
+}
+
+/**
+ * Renders the min/max number inputs for the price range slider.
+ *
+ * @param {RangeInputsProps} props - Component props.
+ *
+ * @returns {JSX.Element} Range input fields.
+ */
+function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: RangeInputsProps): JSX.Element {
+  const handleMinChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onMinChange(parseFloat(e.target.value) || min);
+  };
+
+  const handleMaxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onMaxChange(parseFloat(e.target.value) || max);
+  };
+
+  return (
+    <div className="flex gap-2">
+      <input
+        type="number"
+        min={min}
+        max={max}
+        step={step}
+        value={draftValues[0]}
+        onChange={handleMinChange}
+        placeholder="Min"
+        className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
+      />
+      <span className="text-text-muted flex items-center px-2">-</span>
+      <input
+        type="number"
+        min={min}
+        max={max}
+        step={step}
+        value={draftValues[1]}
+        onChange={handleMaxChange}
+        placeholder="Max"
+        className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
+      />
+    </div>
+  );
 }
 
 /**
@@ -103,37 +167,20 @@ export function PriceRangeSlider({
           className="w-full"
         />
       </div>
-      <div className="flex gap-2">
-        <input
-          type="number"
-          min={min}
-          max={max}
-          step={step}
-          value={draftValues[0]}
-          onChange={(e) => {
-            const nextMin = parseFloat(e.target.value) || min;
-            setDraftValues([nextMin, draftValues[1]]);
-            onMinChange(nextMin);
-          }}
-          placeholder="Min"
-          className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
-        />
-        <span className="text-text-muted flex items-center px-2">-</span>
-        <input
-          type="number"
-          min={min}
-          max={max}
-          step={step}
-          value={draftValues[1]}
-          onChange={(e) => {
-            const nextMax = parseFloat(e.target.value) || max;
-            setDraftValues([draftValues[0], nextMax]);
-            onMaxChange(nextMax);
-          }}
-          placeholder="Max"
-          className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
-        />
-      </div>
+      <RangeInputs
+        min={min}
+        max={max}
+        step={step}
+        draftValues={draftValues}
+        onMinChange={(value) => {
+          setDraftValues([value, draftValues[1]]);
+          onMinChange(value);
+        }}
+        onMaxChange={(value) => {
+          setDraftValues([draftValues[0], value]);
+          onMaxChange(value);
+        }}
+      />
     </div>
   );
 }

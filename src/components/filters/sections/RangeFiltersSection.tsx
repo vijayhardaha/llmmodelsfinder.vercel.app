@@ -24,6 +24,95 @@ interface RangeFiltersSectionProps {
 }
 
 /**
+ * Props for PriceRangeFilter sub-component.
+ *
+ * @interface PriceRangeFilterProps
+ * @property {number} min - Minimum slider value.
+ * @property {number} max - Maximum slider value.
+ * @property {number} step - Slider step value.
+ * @property {number} minValue - Current minimum value.
+ * @property {number} maxValue - Current maximum value.
+ * @property {(value: number) => void} onMinChange - Callback when min changes.
+ * @property {(value: number) => void} onMaxChange - Callback when max changes.
+ * @property {string} label - Label for the slider.
+ */
+interface PriceRangeFilterProps {
+  min: number;
+  max: number;
+  step: number;
+  minValue: number;
+  maxValue: number;
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
+  label: string;
+}
+
+/**
+ * Renders a single PriceRangeSlider with the given configuration.
+ *
+ * @param {PriceRangeFilterProps} props - Component props.
+ *
+ * @returns {JSX.Element} PriceRangeSlider wrapped with filter props.
+ */
+function PriceRangeFilter({
+  min,
+  max,
+  step,
+  minValue,
+  maxValue,
+  onMinChange,
+  onMaxChange,
+  label,
+}: PriceRangeFilterProps): JSX.Element {
+  return (
+    <PriceRangeSlider
+      min={min}
+      max={max}
+      step={step}
+      minValue={minValue}
+      maxValue={maxValue}
+      onMinChange={onMinChange}
+      onMaxChange={onMaxChange}
+      label={label}
+    />
+  );
+}
+
+/**
+ * Renders a year select filter for release or knowledge year.
+ *
+ * @param {object} params - Function params.
+ * @param {string[]} params.yearOptions - Available year options.
+ * @param {string} params.label - Filter group label.
+ * @param {string} params.value - Currently selected year.
+ * @param {(value: string) => void} params.onValueChange - Callback when year changes.
+ *
+ * @returns {JSX.Element} Year select filter group.
+ */
+function YearSelectFilter({
+  yearOptions,
+  label,
+  value,
+  onValueChange,
+}: {
+  yearOptions: string[];
+  label: string;
+  value: string;
+  onValueChange: (value: string) => void;
+}): JSX.Element {
+  return (
+    <FilterGroup label={label}>
+      <SearchableSelect
+        options={yearOptions}
+        value={value}
+        onValueChange={onValueChange}
+        placeholder="Select year..."
+      />
+    </FilterGroup>
+  );
+}
+
+/**
  * Range slider filters section.
  *
  * @param {RangeFiltersSectionProps} props - Component props.
@@ -41,7 +130,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
 
   return (
     <div className="space-y-3 md:space-y-4">
-      <PriceRangeSlider
+      <PriceRangeFilter
         min={PRICE_RANGE_DEFAULTS.min}
         max={PRICE_RANGE_DEFAULTS.max}
         step={PRICE_RANGE_DEFAULTS.step}
@@ -51,7 +140,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
         onMaxChange={(value) => onFilterChange({ maxInputCost: String(value) })}
         label="Input Cost ($/M)"
       />
-      <PriceRangeSlider
+      <PriceRangeFilter
         min={PRICE_RANGE_DEFAULTS.min}
         max={PRICE_RANGE_DEFAULTS.max}
         step={PRICE_RANGE_DEFAULTS.step}
@@ -61,7 +150,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
         onMaxChange={(value) => onFilterChange({ maxOutputCost: String(value) })}
         label="Output Cost ($/M)"
       />
-      <PriceRangeSlider
+      <PriceRangeFilter
         min={CONTEXT_WINDOW_DEFAULTS.min}
         max={CONTEXT_WINDOW_DEFAULTS.max}
         step={CONTEXT_WINDOW_DEFAULTS.step}
@@ -72,22 +161,18 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
         label="Context Window"
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-        <FilterGroup label="Release Year">
-          <SearchableSelect
-            options={yearOptions}
-            value={selectedReleaseYear}
-            onValueChange={(value) => onFilterChange({ minReleaseYear: value, maxReleaseYear: value })}
-            placeholder="Select year..."
-          />
-        </FilterGroup>
-        <FilterGroup label="Knowledge Year">
-          <SearchableSelect
-            options={yearOptions}
-            value={selectedKnowledgeYear}
-            onValueChange={(value) => onFilterChange({ minKnowledge: value, maxKnowledge: value })}
-            placeholder="Select year..."
-          />
-        </FilterGroup>
+        <YearSelectFilter
+          yearOptions={yearOptions}
+          label="Release Year"
+          value={selectedReleaseYear}
+          onValueChange={(value) => onFilterChange({ minReleaseYear: value, maxReleaseYear: value })}
+        />
+        <YearSelectFilter
+          yearOptions={yearOptions}
+          label="Knowledge Year"
+          value={selectedKnowledgeYear}
+          onValueChange={(value) => onFilterChange({ minKnowledge: value, maxKnowledge: value })}
+        />
       </div>
     </div>
   );
