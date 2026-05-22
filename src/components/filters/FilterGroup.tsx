@@ -1,24 +1,23 @@
-import type { JSX } from 'react';
-import * as React from 'react';
+import type { JSX, ReactNode } from 'react';
 
 /**
  * Props for FilterGroup component.
  *
  * @interface FilterGroupProps
  * @property {string} label - Filter group label.
- * @property {React.ReactNode} children - Child elements.
+ * @property {ReactNode} children - Child elements.
  */
 interface FilterGroupProps {
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Filter group wrapper component
  *
- * @param {object} root0 - Component props
- * @param {string} root0.label - Filter group label
- * @param {React.ReactNode} root0.children - Child elements
+ * @param {object} props - Component props
+ * @param {string} props.label - Filter group label
+ * @param {ReactNode} props.children - Child elements
  *
  * @returns {JSX.Element} Filter group element
  */

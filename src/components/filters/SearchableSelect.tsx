@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 
-import { Combobox } from '../ui/Combobox';
+import { Combobox } from '@/components/ui/Combobox';
 
 /**
  * Props for SearchableSelect component.
@@ -23,12 +23,12 @@ interface SearchableSelectProps {
 /**
  * Searchable select component wrapper
  *
- * @param {object} root0 - Component props
- * @param {string[]} root0.options - Select options
- * @param {string} root0.value - Current value
- * @param {(value: string) => void} root0.onValueChange - Value change callback
- * @param {string} root0.label - Label text
- * @param {string} root0.placeholder - Placeholder text
+ * @param {object} props - Component props
+ * @param {string[]} props.options - Select options
+ * @param {string} props.value - Current value
+ * @param {(value: string) => void} props.onValueChange - Value change callback
+ * @param {string} props.label - Label text
+ * @param {string} props.placeholder - Placeholder text
  *
  * @returns {JSX.Element} Searchable select element
  */
