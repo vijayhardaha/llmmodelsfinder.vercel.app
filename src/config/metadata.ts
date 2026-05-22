@@ -3,18 +3,18 @@ import type { Metadata } from 'next';
 /**
  * Site title for LLM Finder.
  */
-export const title = 'LLM Finder - Compare AI Models, Pricing, Context & Reasoning';
+const title = 'LLM Finder - Compare AI Models, Pricing, Context & Reasoning';
 
 /**
  * Site description for LLM Finder.
  */
-export const description =
+const description =
   'Compare AI models from OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek, xAI and more. Filter LLMs by pricing, context window, reasoning, tool support, speed, multimodal capabilities, and free availability.';
 
 /**
  * Site URL for LLM Finder.
  */
-export const url = 'https://llmmodelsfinder.vercel.app';
+const url = 'https://llmmodelsfinder.vercel.app';
 
 /**
  * Next.js metadata configuration for SEO.
