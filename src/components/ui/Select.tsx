@@ -1,4 +1,4 @@
-import { type ComponentPropsWithRef, type ReactNode } from 'react';
+import { type ComponentPropsWithRef, type JSX, type ReactNode } from 'react';
 
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check, ChevronDown } from 'lucide-react';
@@ -41,7 +41,7 @@ interface SelectTriggerProps extends ComponentPropsWithRef<typeof SelectPrimitiv
  *
  * @returns {JSX.Element} SelectTrigger component.
  */
-function SelectTrigger({ className, children, ref, ...props }: SelectTriggerProps) {
+function SelectTrigger({ className, children, ref, ...props }: SelectTriggerProps): JSX.Element {
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -78,7 +78,7 @@ interface SelectScrollUpButtonProps extends ComponentPropsWithRef<typeof SelectP
  *
  * @returns {JSX.Element} SelectScrollUpButton component.
  */
-function SelectScrollUpButton({ className, ref, ...props }: SelectScrollUpButtonProps) {
+function SelectScrollUpButton({ className, ref, ...props }: SelectScrollUpButtonProps): JSX.Element {
   return (
     <SelectPrimitive.ScrollUpButton
       ref={ref}
@@ -107,7 +107,7 @@ interface SelectScrollDownButtonProps extends ComponentPropsWithRef<typeof Selec
  *
  * @returns {JSX.Element} SelectScrollDownButton component.
  */
-function SelectScrollDownButton({ className, ref, ...props }: SelectScrollDownButtonProps) {
+function SelectScrollDownButton({ className, ref, ...props }: SelectScrollDownButtonProps): JSX.Element {
   return (
     <SelectPrimitive.ScrollDownButton
       ref={ref}
@@ -142,7 +142,7 @@ interface SelectContentProps extends ComponentPropsWithRef<typeof SelectPrimitiv
  *
  * @returns {JSX.Element} SelectContent component.
  */
-function SelectContent({ className, children, ref, position = 'popper', ...props }: SelectContentProps) {
+function SelectContent({ className, children, ref, position = 'popper', ...props }: SelectContentProps): JSX.Element {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -185,7 +185,7 @@ interface SelectItemProps extends ComponentPropsWithRef<typeof SelectPrimitive.I
  *
  * @returns {JSX.Element} SelectItem component.
  */
-function SelectItem({ className, children, ref, ...props }: SelectItemProps) {
+function SelectItem({ className, children, ref, ...props }: SelectItemProps): JSX.Element {
   return (
     <SelectPrimitive.Item
       ref={ref}
@@ -225,7 +225,7 @@ interface SelectSeparatorProps extends ComponentPropsWithRef<typeof SelectPrimit
  *
  * @returns {JSX.Element} SelectSeparator component.
  */
-function SelectSeparator({ className, ref, ...props }: SelectSeparatorProps) {
+function SelectSeparator({ className, ref, ...props }: SelectSeparatorProps): JSX.Element {
   return <SelectPrimitive.Separator ref={ref} className={cn('bg-muted -mx-1 my-1 h-px', className)} {...props} />;
 }
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
