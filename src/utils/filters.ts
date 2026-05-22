@@ -21,6 +21,109 @@ export const booleanValue = (value: string): boolean | null => (value === 'any' 
 export const booleanDisplay = (value: boolean | null): string => (value === null ? 'any' : String(value));
 
 /**
+ * Checks if a model matches the search query.
+ *
+ * @param {Model} model - The model to check.
+ * @param {string} search - The search query string.
+ *
+ * @returns {boolean} True if model name or ID includes the search query.
+ */
+function filterBySearch(model: Model, search: string): boolean {
+  const searchLowerValue = search.toLowerCase();
+  return model.name.toLowerCase().includes(searchLowerValue) || model.id.toLowerCase().includes(searchLowerValue);
+}
+
+/**
+ * Checks if a model matches the exact match filters (provider, family, booleans).
+ *
+ * @param {Model} model - The model to check.
+ * @param {FilterState} filters - Filter state.
+ *
+ * @returns {boolean} True if the model passes all exact match checks.
+ */
+function filterByExactMatch(model: Model, filters: FilterState): boolean {
+  if (filters.provider && model.provider !== filters.provider) return false;
+  if (filters.family && model.family !== filters.family) return false;
+  if (filters.toolCall !== null && model.toolCall !== filters.toolCall) return false;
+  if (filters.reasoning !== null && model.reasoning !== filters.reasoning) return false;
+  if (filters.free !== null && model.free !== filters.free) return false;
+  if (filters.inputModality && !model.inputModality.includes(filters.inputModality)) return false;
+  if (filters.outputModality && !model.outputModality.includes(filters.outputModality)) return false;
+
+  return true;
+}
+
+/**
+ * Checks if a model's input/output costs fall within the filter ranges.
+ *
+ * @param {Model} model - The model to check.
+ * @param {FilterState} filters - Filter state.
+ *
+ * @returns {boolean} True if the model passes all cost range checks.
+ */
+function filterByCost(model: Model, filters: FilterState): boolean {
+  if (filters.minInputCost && model.inputCost < parseFloat(filters.minInputCost)) return false;
+  if (filters.maxInputCost && model.inputCost > parseFloat(filters.maxInputCost)) return false;
+  if (filters.minOutputCost && model.outputCost < parseFloat(filters.minOutputCost)) return false;
+  if (filters.maxOutputCost && model.outputCost > parseFloat(filters.maxOutputCost)) return false;
+
+  return true;
+}
+
+/**
+ * Checks if a model's context window falls within the filter range.
+ *
+ * @param {Model} model - The model to check.
+ * @param {FilterState} filters - Filter state.
+ *
+ * @returns {boolean} True if the model passes context range checks.
+ */
+function filterByContext(model: Model, filters: FilterState): boolean {
+  if (filters.minContext && model.context < parseInt(filters.minContext, 10)) return false;
+  if (filters.maxContext && model.context > parseInt(filters.maxContext, 10)) return false;
+
+  return true;
+}
+
+/**
+ * Checks if a model's knowledge cutoff year falls within the filter range.
+ *
+ * @param {Model} model - The model to check.
+ * @param {FilterState} filters - Filter state.
+ *
+ * @returns {boolean} True if the model passes knowledge year range checks.
+ */
+function filterByKnowledgeYear(model: Model, filters: FilterState): boolean {
+  if (!filters.minKnowledge && !filters.maxKnowledge) return true;
+
+  const knowledgeYearValue = extractYear(model.knowledge);
+
+  if (filters.minKnowledge && knowledgeYearValue < parseInt(filters.minKnowledge, 10)) return false;
+  if (filters.maxKnowledge && knowledgeYearValue > parseInt(filters.maxKnowledge, 10)) return false;
+
+  return true;
+}
+
+/**
+ * Checks if a model's release year falls within the filter range.
+ *
+ * @param {Model} model - The model to check.
+ * @param {FilterState} filters - Filter state.
+ *
+ * @returns {boolean} True if the model passes release year range checks.
+ */
+function filterByReleaseYear(model: Model, filters: FilterState): boolean {
+  if (!filters.minReleaseYear && !filters.maxReleaseYear) return true;
+
+  const releaseYearValue = extractYear(model.releaseDate);
+
+  if (filters.minReleaseYear && releaseYearValue < parseInt(filters.minReleaseYear, 10)) return false;
+  if (filters.maxReleaseYear && releaseYearValue > parseInt(filters.maxReleaseYear, 10)) return false;
+
+  return true;
+}
+
+/**
  * Applies filters to a models array based on filter state.
  *
  * @param {Model[]} models - Array of models to filter.
@@ -30,47 +133,12 @@ export const booleanDisplay = (value: boolean | null): string => (value === null
  */
 export const applyFilters = (models: Model[], filters: FilterState): Model[] => {
   return models.filter((modelItem) => {
-    if (filters.search) {
-      const searchLowerValue = filters.search.toLowerCase();
-      const hasSearchMatch =
-        modelItem.name.toLowerCase().includes(searchLowerValue)
-        || modelItem.id.toLowerCase().includes(searchLowerValue);
-      if (!hasSearchMatch) return false;
-    }
-
-    if (filters.provider && modelItem.provider !== filters.provider) return false;
-    if (filters.family && modelItem.family !== filters.family) return false;
-    if (filters.toolCall !== null && modelItem.toolCall !== filters.toolCall) return false;
-    if (filters.reasoning !== null && modelItem.reasoning !== filters.reasoning) return false;
-    if (filters.free !== null && modelItem.free !== filters.free) return false;
-    if (filters.inputModality && !modelItem.inputModality.includes(filters.inputModality)) return false;
-    if (filters.outputModality && !modelItem.outputModality.includes(filters.outputModality)) return false;
-    if (filters.minInputCost && modelItem.inputCost < parseFloat(filters.minInputCost)) return false;
-    if (filters.maxInputCost && modelItem.inputCost > parseFloat(filters.maxInputCost)) return false;
-    if (filters.minOutputCost && modelItem.outputCost < parseFloat(filters.minOutputCost)) return false;
-    if (filters.maxOutputCost && modelItem.outputCost > parseFloat(filters.maxOutputCost)) return false;
-    if (filters.minContext && modelItem.context < parseInt(filters.minContext, 10)) return false;
-    if (filters.maxContext && modelItem.context > parseInt(filters.maxContext, 10)) return false;
-
-    if (filters.minKnowledge) {
-      const knowledgeYearValue = extractYear(modelItem.knowledge);
-      if (knowledgeYearValue < parseInt(filters.minKnowledge, 10)) return false;
-    }
-
-    if (filters.maxKnowledge) {
-      const knowledgeYearValue = extractYear(modelItem.knowledge);
-      if (knowledgeYearValue > parseInt(filters.maxKnowledge, 10)) return false;
-    }
-
-    if (filters.minReleaseYear) {
-      const releaseYearValue = extractYear(modelItem.releaseDate);
-      if (releaseYearValue < parseInt(filters.minReleaseYear, 10)) return false;
-    }
-
-    if (filters.maxReleaseYear) {
-      const releaseYearValue = extractYear(modelItem.releaseDate);
-      if (releaseYearValue > parseInt(filters.maxReleaseYear, 10)) return false;
-    }
+    if (filters.search && !filterBySearch(modelItem, filters.search)) return false;
+    if (!filterByExactMatch(modelItem, filters)) return false;
+    if (!filterByCost(modelItem, filters)) return false;
+    if (!filterByContext(modelItem, filters)) return false;
+    if (!filterByKnowledgeYear(modelItem, filters)) return false;
+    if (!filterByReleaseYear(modelItem, filters)) return false;
 
     return true;
   });
