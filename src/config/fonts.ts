@@ -3,7 +3,7 @@ import { Trocchi, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 /**
  * Poppins font configuration for body text.
  */
-export const serifFont = Trocchi({
+const serifFont = Trocchi({
   variable: '--font-poppins',
   subsets: ['latin'],
   weight: ['400'],
@@ -14,7 +14,7 @@ export const serifFont = Trocchi({
 /**
  * Space Grotesk font configuration for headings.
  */
-export const sansFont = Space_Grotesk({
+const sansFont = Space_Grotesk({
   variable: '--font-space-grotesk',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -25,7 +25,7 @@ export const sansFont = Space_Grotesk({
 /**
  * JetBrains Mono font configuration for mono text.
  */
-export const monoFont = JetBrains_Mono({
+const monoFont = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
