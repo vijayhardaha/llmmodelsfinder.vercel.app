@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 'react';
 
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
@@ -28,15 +28,15 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
 /**
  * TooltipContent component wrapper from Radix UI.
  *
- * @param {React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>} props - Component props.
+ * @param {ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>} props - Component props.
  * @param {number} [props.sideOffset] - Distance from trigger (default: 4).
  * @param {string} [props.className] - Additional CSS classes.
  *
  * @returns {JSX.Element} TooltipContent component.
  */
-const TooltipContent = React.forwardRef<
-  React.ComponentRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+const TooltipContent = forwardRef<
+  ComponentRef<typeof TooltipPrimitive.Content>,
+  ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => (
   <TooltipPrimitive.Content
     ref={ref}
