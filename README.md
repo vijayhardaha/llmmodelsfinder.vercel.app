@@ -14,3 +14,7 @@ LLM Finder is a searchable directory of AI language models. Compare models from 
 - **Discover** — Browse popular searches and learn about model families
 
 Data is sourced from [models.dev](https://models.dev) and refreshed on every visit.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
