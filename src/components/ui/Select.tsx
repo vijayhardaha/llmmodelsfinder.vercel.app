@@ -45,6 +45,7 @@ function SelectTrigger({ className, children, ref, ...props }: SelectTriggerProp
   return (
     <SelectPrimitive.Trigger
       ref={ref}
+      id="select-trigger"
       className={cn(
         'flex h-10 items-center justify-between border-2 border-black bg-white px-3 py-2 text-sm font-medium text-black focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
         className || 'w-full'

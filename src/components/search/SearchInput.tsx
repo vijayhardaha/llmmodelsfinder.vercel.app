@@ -60,10 +60,10 @@ export function SearchInput({ filters, updateFilters, onSearchChange }: SearchIn
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" id="search-section">
       <Search className="text-text-muted absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2" />
       <input
-        id="search"
+        id="search-input"
         name="search"
         type="text"
         placeholder="Search models by name or ID..."

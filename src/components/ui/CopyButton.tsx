@@ -38,6 +38,7 @@ export function CopyButton({ value, className = '' }: CopyButtonProps): JSX.Elem
 
   return (
     <button
+      id="btn-copy"
       type="button"
       onClick={handleCopy}
       className={`inline-flex cursor-pointer items-center justify-center p-0.5 text-black opacity-50 transition-opacity hover:opacity-100 ${className}`}

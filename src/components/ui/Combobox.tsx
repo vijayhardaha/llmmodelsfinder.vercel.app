@@ -60,8 +60,12 @@ function ComboboxDropdown({
   searchPlaceholder,
 }: ComboboxDropdownProps): JSX.Element {
   return (
-    <div className="shadow-neo-md absolute top-full z-50 mt-1 w-full border-2 border-black bg-white">
+    <div
+      id="combobox-dropdown"
+      className="shadow-neo-md absolute top-full z-50 mt-1 w-full border-2 border-black bg-white"
+    >
       <input
+        id="combobox-search-input"
         type="text"
         placeholder={searchPlaceholder}
         onChange={(e) => onSearchChange(e.target.value)}
@@ -133,8 +137,9 @@ export function Combobox({
   const selectedLabel = options.find((opt) => opt.value === value)?.label || placeholder;
 
   return (
-    <div ref={dropdownRef} className="relative w-full">
+    <div ref={dropdownRef} className="relative w-full" id="combobox-wrapper">
       <button
+        id="combobox-trigger"
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between border-2 border-black bg-white px-3 py-2 text-sm font-medium text-black"
       >
