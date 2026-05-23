@@ -9,7 +9,7 @@ import { Container } from './Container';
  */
 export function Footer(): JSX.Element {
   return (
-    <footer className="bg-surface-alt border-t-4 border-black py-4 md:py-12">
+    <footer id="site-footer" className="bg-surface-alt border-t-4 border-black py-4 md:py-12">
       <Container>
         <div className="grid gap-6 md:grid-cols-2">
           <div>

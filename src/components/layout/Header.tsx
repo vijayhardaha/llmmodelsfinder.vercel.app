@@ -13,7 +13,7 @@ import { Container } from './Container';
  */
 export function Header(): JSX.Element {
   return (
-    <header className="border-b-4 border-black bg-white py-2">
+    <header id="site-header" className="border-b-4 border-black bg-white py-2">
       <Container>
         <div className="flex items-center justify-between">
           <div>
@@ -21,7 +21,7 @@ export function Header(): JSX.Element {
             <p className="text-text-muted text-xs md:text-sm">Compare and discover AI models across providers</p>
           </div>
           <div className="hidden items-center gap-2 md:flex">
-            <Button asChild variant="primary" size="sm">
+            <Button id="btn-original-models-dev" asChild variant="primary" size="sm">
               <a href="https://models.dev/" target="_blank" rel="noopener noreferrer">
                 Original: models.dev
                 <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
