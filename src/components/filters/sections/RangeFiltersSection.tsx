@@ -129,7 +129,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
   const selectedKnowledgeYear = filters.minKnowledge && filters.maxKnowledge ? filters.minKnowledge : '';
 
   return (
-    <div className="space-y-3 md:space-y-4">
+    <div id="range-filters-section" className="space-y-3 md:space-y-4">
       <PriceRangeFilter
         min={PRICE_RANGE_DEFAULTS.min}
         max={PRICE_RANGE_DEFAULTS.max}

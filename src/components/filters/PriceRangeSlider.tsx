@@ -66,8 +66,9 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" id="range-inputs">
       <input
+        id="range-input-min"
         type="number"
         min={min}
         max={max}
@@ -79,6 +80,7 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
       />
       <span className="text-text-muted flex items-center px-2">-</span>
       <input
+        id="range-input-max"
         type="number"
         min={min}
         max={max}
