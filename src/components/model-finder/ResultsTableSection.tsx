@@ -24,7 +24,7 @@ interface ResultsTableSectionProps {
  */
 export function ResultsTableSection({ data, perPage, currentPage }: ResultsTableSectionProps) {
   return (
-    <div className="overflow-x-auto">
+    <div id="results-table-section" className="overflow-x-auto">
       <ModelTable data={data} perPage={perPage} currentPage={currentPage} />
     </div>
   );

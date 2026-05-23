@@ -7,7 +7,7 @@ import type { JSX } from 'react';
  */
 export function NoResultsState(): JSX.Element {
   return (
-    <div className="border-4 border-black bg-white p-6 text-center md:p-12">
+    <div id="no-results-state" className="border-4 border-black bg-white p-6 text-center md:p-12">
       <p className="text-text text-base font-bold md:text-lg">No models found matching your filters</p>
       <p className="text-text-muted mt-2 text-xs md:text-sm">Try adjusting your search criteria</p>
     </div>

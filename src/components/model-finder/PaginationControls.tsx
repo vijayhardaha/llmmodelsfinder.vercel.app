@@ -53,6 +53,7 @@ function PageButton({ pageItem, currentPage, onPageChange }: PaginationButtonPro
 
   return (
     <button
+      id={`page-btn-${pageItem}`}
       onClick={() => onPageChange(pageItem)}
       className={`flex h-8 min-w-8 shrink-0 cursor-pointer items-center justify-center border-2 px-1 text-xs font-bold tracking-wider uppercase transition-all ${
         currentPage === pageItem
@@ -85,7 +86,10 @@ export function PaginationControls({
   const isLastPage = currentPage === totalPages;
 
   return (
-    <div className="flex flex-col gap-3 bg-black px-4 py-2 text-white md:flex-row md:items-center md:justify-between md:gap-4">
+    <nav
+      id="pagination-controls"
+      className="flex flex-col gap-3 bg-black px-4 py-2 text-white md:flex-row md:items-center md:justify-between md:gap-4"
+    >
       <div className="hidden text-xs font-semibold md:block md:text-sm">
         Showing <span className="text-primary">{startDisplay}</span>-<span className="text-primary">{endDisplay}</span>{' '}
         of <span className="text-primary">{totalCount}</span> models
@@ -93,6 +97,7 @@ export function PaginationControls({
 
       <div className="flex flex-wrap items-center justify-center gap-2 md:justify-end">
         <Button
+          id="btn-first-page"
           variant="white"
           size="sm"
           onClick={() => onPageChange(1)}
@@ -104,6 +109,7 @@ export function PaginationControls({
         </Button>
 
         <Button
+          id="btn-prev-page"
           variant="white"
           size="sm"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -126,6 +132,7 @@ export function PaginationControls({
         </div>
 
         <Button
+          id="btn-next-page"
           variant="white"
           size="sm"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
@@ -137,6 +144,7 @@ export function PaginationControls({
         </Button>
 
         <Button
+          id="btn-last-page"
           variant="white"
           size="sm"
           onClick={() => onPageChange(totalPages)}
@@ -147,6 +155,6 @@ export function PaginationControls({
           <ChevronsRight className="h-4 w-4" role="img" />
         </Button>
       </div>
-    </div>
+    </nav>
   );
 }
