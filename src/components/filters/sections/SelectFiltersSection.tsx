@@ -41,32 +41,36 @@ export function SelectFiltersSection({
 }: SelectFiltersSectionProps): JSX.Element {
   return (
     <div id="select-filters-section" className="grid grid-cols-1 gap-3 md:gap-4 lg:grid-cols-2">
-      <FilterGroup label="Provider">
+      <FilterGroup label="Provider" id="provider-filter">
         <SearchableSelect
+          id="provider-filter"
           options={providers}
           value={filters.provider}
           onValueChange={(value) => onFilterChange({ provider: value })}
           placeholder="All Providers"
         />
       </FilterGroup>
-      <FilterGroup label="Family">
+      <FilterGroup label="Family" id="family-filter">
         <SearchableSelect
+          id="family-filter"
           options={families}
           value={filters.family}
           onValueChange={(value) => onFilterChange({ family: value })}
           placeholder="All Families"
         />
       </FilterGroup>
-      <FilterGroup label="Input Type">
+      <FilterGroup label="Input Type" id="input-type-filter">
         <SearchableSelect
+          id="input-type-filter"
           options={inputModalities}
           value={filters.inputModality}
           onValueChange={(value) => onFilterChange({ inputModality: value })}
           placeholder="All Input Types"
         />
       </FilterGroup>
-      <FilterGroup label="Output Type">
+      <FilterGroup label="Output Type" id="output-type-filter">
         <SearchableSelect
+          id="output-type-filter"
           options={outputModalities}
           value={filters.outputModality}
           onValueChange={(value) => onFilterChange({ outputModality: value })}

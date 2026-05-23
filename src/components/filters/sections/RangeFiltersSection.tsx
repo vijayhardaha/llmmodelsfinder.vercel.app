@@ -27,6 +27,7 @@ interface RangeFiltersSectionProps {
  * Props for PriceRangeFilter sub-component.
  *
  * @interface PriceRangeFilterProps
+ * @property {string} id - Unique identifier prefix for input elements.
  * @property {number} min - Minimum slider value.
  * @property {number} max - Maximum slider value.
  * @property {number} step - Slider step value.
@@ -37,6 +38,7 @@ interface RangeFiltersSectionProps {
  * @property {string} label - Label for the slider.
  */
 interface PriceRangeFilterProps {
+  id: string;
   min: number;
   max: number;
   step: number;
@@ -55,6 +57,7 @@ interface PriceRangeFilterProps {
  * @returns {JSX.Element} PriceRangeSlider wrapped with filter props.
  */
 function PriceRangeFilter({
+  id,
   min,
   max,
   step,
@@ -66,6 +69,7 @@ function PriceRangeFilter({
 }: PriceRangeFilterProps): JSX.Element {
   return (
     <PriceRangeSlider
+      id={id}
       min={min}
       max={max}
       step={step}
@@ -100,9 +104,11 @@ function YearSelectFilter({
   value: string;
   onValueChange: (value: string) => void;
 }): JSX.Element {
+  const id = label.toLowerCase().replace(/\s+/g, '-');
   return (
-    <FilterGroup label={label}>
+    <FilterGroup label={label} id={id}>
       <SearchableSelect
+        id={id}
         options={yearOptions}
         value={value}
         onValueChange={onValueChange}
@@ -131,6 +137,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
   return (
     <div id="range-filters-section" className="space-y-3 md:space-y-4">
       <PriceRangeFilter
+        id="input-cost"
         min={PRICE_RANGE_DEFAULTS.min}
         max={PRICE_RANGE_DEFAULTS.max}
         step={PRICE_RANGE_DEFAULTS.step}
@@ -141,6 +148,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
         label="Input Cost ($/M)"
       />
       <PriceRangeFilter
+        id="output-cost"
         min={PRICE_RANGE_DEFAULTS.min}
         max={PRICE_RANGE_DEFAULTS.max}
         step={PRICE_RANGE_DEFAULTS.step}
@@ -151,6 +159,7 @@ export function RangeFiltersSection({ filters, onFilterChange }: RangeFiltersSec
         label="Output Cost ($/M)"
       />
       <PriceRangeFilter
+        id="context-window"
         min={CONTEXT_WINDOW_DEFAULTS.min}
         max={CONTEXT_WINDOW_DEFAULTS.max}
         step={CONTEXT_WINDOW_DEFAULTS.step}
