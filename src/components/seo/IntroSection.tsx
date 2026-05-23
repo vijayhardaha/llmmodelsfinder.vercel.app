@@ -31,7 +31,7 @@ const popularSearches: string[] = [
  */
 export function IntroSection(): JSX.Element {
   return (
-    <section className="bg-surface-alt border-4 border-black p-6 md:p-12">
+    <section id="intro-section" className="bg-surface-alt border-4 border-black p-6 md:p-12">
       <h2 className="font-heading text-2xl font-black text-black uppercase md:text-4xl">
         Discover the Best AI Models for Your Use Case
       </h2>
@@ -64,9 +64,15 @@ export function IntroSection(): JSX.Element {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2" id="popular-searches">
         {popularSearches.map((search) => (
-          <Button key={search} variant="primary-outlined" size="sm" asChild>
+          <Button
+            key={search}
+            id={`btn-popular-search-${search.toLowerCase().replace(/\s+/g, '-')}`}
+            variant="primary-outlined"
+            size="sm"
+            asChild
+          >
             <span>{search}</span>
           </Button>
         ))}

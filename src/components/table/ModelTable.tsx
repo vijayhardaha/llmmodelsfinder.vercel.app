@@ -72,7 +72,7 @@ function renderLimitValue(value: number | null | undefined): JSX.Element {
  */
 function renderTableHeader({ table }: { table: ReturnType<typeof useReactTable<Model>> }): JSX.Element {
   return (
-    <thead>
+    <thead id="model-table-thead">
       {table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id} className="border-b-4 border-black bg-black">
           {headerGroup.headers.map((header) => (
@@ -121,7 +121,7 @@ function renderTableBody({
   currentPage: number;
 }): JSX.Element {
   return (
-    <tbody>
+    <tbody id="model-table-tbody">
       {table
         .getRowModel()
         .rows.slice((currentPage - 1) * perPage, currentPage * perPage)
@@ -354,8 +354,8 @@ export function ModelTable({ data, perPage = 15, currentPage = 1, onSortingChang
   });
 
   return (
-    <div className="overflow-x-auto border-4 border-black">
-      <table className="w-full">
+    <div id="model-table-wrapper" className="overflow-x-auto border-4 border-black">
+      <table id="model-table" className="w-full">
         {renderTableHeader({ table })}
         {renderTableBody({ table, perPage, currentPage })}
       </table>

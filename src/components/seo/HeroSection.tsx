@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/Button';
  */
 export function HeroSection(): JSX.Element {
   return (
-    <section className="border-4 border-black bg-white p-6 text-center md:p-12">
+    <section id="hero-section" className="border-4 border-black bg-white p-6 text-center md:p-12">
       <h1 className="font-heading text-3xl font-black text-black uppercase md:text-5xl">
         Compare and Discover AI Models Instantly
       </h1>
@@ -21,14 +21,14 @@ export function HeroSection(): JSX.Element {
         pricing, context window, reasoning ability, tool support, speed, release year, and free availability.
       </p>
 
-      <div className="flex flex-col gap-3 pt-6 sm:flex-row sm:justify-center">
-        <Button variant="primary" size="md" asChild>
+      <div className="flex flex-col gap-3 pt-6 sm:flex-row sm:justify-center" id="hero-cta-buttons">
+        <Button id="btn-explore-models" variant="primary" size="md" asChild>
           <span>Explore Models</span>
         </Button>
-        <Button variant="secondary" size="md" asChild>
+        <Button id="btn-compare-providers" variant="secondary" size="md" asChild>
           <span>Compare Providers</span>
         </Button>
-        <Button variant="primary-outlined" size="md" asChild>
+        <Button id="btn-find-free-models" variant="primary-outlined" size="md" asChild>
           <span>Find Free Models</span>
         </Button>
       </div>
