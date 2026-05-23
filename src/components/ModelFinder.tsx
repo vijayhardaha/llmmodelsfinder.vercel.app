@@ -1,6 +1,8 @@
 'use client';
 
-import { useCallback, useMemo, useState, type JSX } from 'react';
+import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
+
+import { X } from 'lucide-react';
 
 import { defaultFilters } from '@/components/filters/constants/defaultFilters';
 import { FilterPanel } from '@/components/filters/FilterPanel';
@@ -10,6 +12,7 @@ import { PaginationControls } from '@/components/model-finder/PaginationControls
 import { ResultsSummaryBar } from '@/components/model-finder/ResultsSummaryBar';
 import { ResultsTableSection } from '@/components/model-finder/ResultsTableSection';
 import { SearchInput } from '@/components/search/SearchInput';
+import { Button } from '@/components/ui/Button';
 import { useFilters } from '@/hooks/useFilters';
 import type { Model } from '@/types/models';
 import { applyFilters, getEndIndex, getStartIndex, getTotalPages } from '@/utils';
@@ -36,6 +39,20 @@ export function ModelFinder({ initialModels }: ModelFinderProps): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(15);
   const [searchResetKey, setSearchResetKey] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Lock body scroll when filter panel is open (below xl)
+  useEffect(() => {
+    if (showFilters) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showFilters]);
 
   const filteredModels = useMemo(() => applyFilters(initialModels, filters), [initialModels, filters]);
   const totalPages = getTotalPages(filteredModels.length, perPage);
@@ -75,9 +92,49 @@ export function ModelFinder({ initialModels }: ModelFinderProps): JSX.Element {
     updateFilters(defaultFilters);
   }, [updateFilters]);
 
+  /**
+   * Toggles the filter panel visibility.
+   */
+  const handleToggleFilters = useCallback(() => {
+    setShowFilters((previous) => !previous);
+  }, []);
+
+  /**
+   * Closes the filter panel.
+   */
+  const handleCloseFilters = useCallback(() => {
+    setShowFilters(false);
+  }, []);
+
+  const filterPanelContent = (
+    <>
+      <SearchInput
+        key={searchResetKey}
+        filters={filters}
+        updateFilters={handleFiltersChange}
+        onSearchChange={() => setCurrentPage(1)}
+      />
+      <FilterPanel
+        models={initialModels}
+        filters={filters}
+        updateFilters={handleFiltersChange}
+        onClearFilters={handleClearFilters}
+      />
+    </>
+  );
+
   return (
     <Container>
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_480px]">
+      {/* Overlay backdrop for filter panel below xl */}
+      {showFilters && (
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm xl:hidden"
+          onClick={handleCloseFilters}
+        />
+      )}
+
+      <div className="relative grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_480px]">
         <div className="space-y-6">
           {filteredModels.length > 0 ? (
             <>
@@ -87,6 +144,8 @@ export function ModelFinder({ initialModels }: ModelFinderProps): JSX.Element {
                 totalCount={filteredModels.length}
                 perPage={perPage}
                 onPerPageChange={handlePerPageChange}
+                onToggleFilters={handleToggleFilters}
+                showFilters={showFilters}
               />
               <ResultsTableSection data={filteredModels} perPage={perPage} currentPage={currentPage} />
             </>
@@ -108,21 +167,31 @@ export function ModelFinder({ initialModels }: ModelFinderProps): JSX.Element {
           )}
         </div>
 
-        <div className="h-fit xl:sticky xl:top-4">
-          <div className="space-y-6">
-            <SearchInput
-              key={searchResetKey}
-              filters={filters}
-              updateFilters={handleFiltersChange}
-              onSearchChange={() => setCurrentPage(1)}
-            />
-            <FilterPanel
-              models={initialModels}
-              filters={filters}
-              updateFilters={handleFiltersChange}
-              onClearFilters={handleClearFilters}
-            />
+        {/* Right column: sticky in-grid at xl+, fixed overlay below xl */}
+        <div
+          className={[
+            // xl+: in-grid sticky
+            'xl:sticky xl:top-4 xl:right-auto xl:block xl:h-fit xl:translate-x-0 xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none',
+            // below xl: fixed overlay
+            'fixed z-40 bg-white transition-all duration-300 ease-in-out',
+            // below md: full-width bottom sheet
+            'inset-x-0 bottom-0 max-h-[60vh] overflow-y-auto border-t-4 border-black p-4 shadow-2xl',
+            // md to xl: right-side panel
+            'md:inset-y-0 md:right-0 md:left-auto md:max-h-none md:w-115 md:overflow-y-auto md:border-t-0 md:border-l-4 md:border-black md:p-6 md:shadow-2xl',
+            showFilters
+              ? 'translate-y-0 md:translate-x-0 md:translate-y-0'
+              : 'translate-y-full md:translate-x-full md:translate-y-0',
+          ].join(' ')}
+        >
+          {/* Close button row for overlay mode (xl:hidden) */}
+          <div className="mb-4 flex items-center justify-between xl:hidden">
+            <h3 className="font-heading text-lg font-black text-black uppercase">Filters</h3>
+            <Button id="btn-close-filters" variant="primary" size="sm" className="h-10" onClick={handleCloseFilters}>
+              <X className="h-4 w-4" strokeWidth={3} />
+              <span className="hidden md:inline">Close</span>
+            </Button>
           </div>
+          <div className="space-y-6">{filterPanelContent}</div>
         </div>
       </div>
     </Container>

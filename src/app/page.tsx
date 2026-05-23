@@ -109,7 +109,7 @@ async function fetchModels(): Promise<Model[]> {
  */
 function renderErrorState(errorMessage: string): JSX.Element {
   return (
-    <main className="flex-1">
+    <main id="error-state" className="flex-1">
       <div className="border-4 border-black bg-white p-6 text-center md:p-12">
         <h2 className="font-heading text-xl font-black text-black uppercase md:text-2xl">Failed to Load Models</h2>
         <p className="text-text-muted mt-2 text-sm md:text-base">{errorMessage}</p>
@@ -140,7 +140,7 @@ export default async function Home(): Promise<JSX.Element> {
   }
 
   return (
-    <main className="flex-1 py-6">
+    <main id="main-content" className="flex-1 py-6">
       <ErrorBoundary>
         <ModelFinder initialModels={models} />
       </ErrorBoundary>

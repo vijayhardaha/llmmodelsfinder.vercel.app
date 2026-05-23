@@ -74,7 +74,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <p className="text-text-muted mt-2 text-sm md:text-base">
             {this.state.error?.message || 'An unexpected error occurred'}
           </p>
-          <Button variant="primary" size="md" onClick={() => window.location.reload()} className="mt-4">
+          <Button id="btn-reload" variant="primary" size="md" onClick={() => window.location.reload()} className="mt-4">
             Reload Page
           </Button>
         </div>
