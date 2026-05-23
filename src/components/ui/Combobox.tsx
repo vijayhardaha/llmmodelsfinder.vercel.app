@@ -10,13 +10,15 @@ import { cn } from '@/utils';
  * Props for Combobox component.
  *
  * @interface ComboboxProps
+ * @property {string} id - Unique identifier prefix for internal elements.
  * @property {Array<{value: string, label: string}>} options - Array of options with value and label.
  * @property {string} value - Current selected value.
  * @property {(value: string) => void} onValueChange - Callback when value changes.
- * @property {string} [placeholder] - Placeholder text.
- * @property {string} [searchPlaceholder] - Search input placeholder.
+ * @property {string} placeholder - Placeholder text.
+ * @property {string} searchPlaceholder - Search input placeholder.
  */
 interface ComboboxProps {
+  id?: string;
   options: Array<{ value: string; label: string }>;
   value: string;
   onValueChange: (value: string) => void;
@@ -28,6 +30,7 @@ interface ComboboxProps {
  * Props for ComboboxDropdown sub-component.
  *
  * @interface ComboboxDropdownProps
+ * @property {string} id - Unique identifier prefix for internal elements.
  * @property {Array<{value: string, label: string}>} filtered - Filtered options to display.
  * @property {string} value - Current selected value.
  * @property {(value: string) => void} onValueChange - Callback when value changes.
@@ -75,7 +78,7 @@ function ComboboxDropdown({
         {filtered.length === 0 ? (
           <div className="text-text-muted px-3 py-2 text-sm">No results found</div>
         ) : (
-          filtered.map((option) => (
+          filtered.map((option: { value: string; label: string }) => (
             <button
               key={option.value}
               onClick={() => {
@@ -101,15 +104,17 @@ function ComboboxDropdown({
  * Searchable combobox component.
  *
  * @param {object} props - Component props
+ * @param {string} props.id - Unique identifier prefix for internal elements.
  * @param {Array<{value: string, label: string}>} props.options - Array of options with value and label.
  * @param {string} props.value - Current selected value.
  * @param {(value: string) => void} props.onValueChange - Callback when value changes.
- * @param {string} [props.placeholder] - Placeholder text.
- * @param {string} [props.searchPlaceholder] - Search input placeholder.
+ * @param {string} props.placeholder - Placeholder text.
+ * @param {string} props.searchPlaceholder - Search input placeholder.
  *
  * @returns {JSX.Element} Combobox component.
  */
 export function Combobox({
+  id = 'combobox',
   options,
   value,
   onValueChange,
@@ -137,9 +142,9 @@ export function Combobox({
   const selectedLabel = options.find((opt) => opt.value === value)?.label || placeholder;
 
   return (
-    <div ref={dropdownRef} className="relative w-full" id="combobox-wrapper">
+    <div ref={dropdownRef} className="relative w-full" id={`${id}-wrapper`}>
       <button
-        id="combobox-trigger"
+        id={`${id}-trigger`}
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between border-2 border-black bg-white px-3 py-2 text-sm font-medium text-black"
       >
