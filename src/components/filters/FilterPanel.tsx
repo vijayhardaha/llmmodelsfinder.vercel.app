@@ -91,8 +91,8 @@ export function FilterPanel({ models, filters, updateFilters, onClearFilters }: 
   }
 
   return (
-    <div id="filter-panel" className="bg-surface-alt border-b-4 border-black p-4 md:p-6">
-      <div className="space-y-3 pb-6 md:space-y-4">
+    <div id="filter-panel" className="bg-surface-alt border-b-4 border-black">
+      <div className="space-y-4 p-6">
         <SelectFiltersSection
           filters={filters}
           providers={providers}
@@ -104,7 +104,7 @@ export function FilterPanel({ models, filters, updateFilters, onClearFilters }: 
         <BooleanFiltersSection filters={filters} onFilterChange={handleFilterChange} />
         <RangeFiltersSection filters={filters} onFilterChange={handleFilterChange} />
       </div>
-      <div className="bg-surface-alt mb:bottom-4 pt-3 md:sticky md:pt-4">
+      <div className="bg-surface-alt pt-3 md:sticky md:bottom-0 md:pt-4">
         <Button id="btn-clear-filters" variant="primary" size="md" className="w-full" onClick={onClearFilters}>
           Clear All Filters
         </Button>

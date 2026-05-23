@@ -175,23 +175,25 @@ export function ModelFinder({ initialModels }: ModelFinderProps): JSX.Element {
             // below xl: fixed overlay
             'fixed z-40 bg-white transition-all duration-300 ease-in-out',
             // below md: full-width bottom sheet
-            'inset-x-0 bottom-0 max-h-[60vh] overflow-y-auto border-t-4 border-black p-4 shadow-2xl',
+            'inset-x-0 bottom-0 max-h-[60vh] overflow-y-auto border-t-4 border-black p-0 shadow-2xl',
             // md to xl: right-side panel
-            'md:inset-y-0 md:right-0 md:left-auto md:max-h-none md:w-115 md:overflow-y-auto md:border-t-0 md:border-l-4 md:border-black md:p-6 md:shadow-2xl',
+            'md:inset-y-0 md:right-0 md:left-auto md:max-h-none md:w-115 md:overflow-y-auto md:border-t-0 md:border-l-4 md:border-black md:p-0 md:shadow-2xl',
             showFilters
               ? 'translate-y-0 md:translate-x-0 md:translate-y-0'
               : 'translate-y-full md:translate-x-full md:translate-y-0',
           ].join(' ')}
         >
           {/* Close button row for overlay mode (xl:hidden) */}
-          <div className="mb-4 flex items-center justify-between xl:hidden">
+          <div className="sticky top-0 z-10 mb-4 flex items-center justify-between border-b-4 border-black bg-white p-6 py-4 xl:hidden">
             <h3 className="font-heading text-lg font-black text-black uppercase">Filters</h3>
             <Button id="btn-close-filters" variant="primary" size="sm" className="h-10" onClick={handleCloseFilters}>
               <X className="h-4 w-4" strokeWidth={3} />
               <span className="hidden md:inline">Close</span>
             </Button>
           </div>
-          <div className="space-y-6">{filterPanelContent}</div>
+          <div className="p-6 xl:p-0">
+            <div className="space-y-6">{filterPanelContent}</div>
+          </div>
         </div>
       </div>
     </Container>

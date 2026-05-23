@@ -20,10 +20,10 @@ export function Header(): JSX.Element {
             <h1 className="font-heading text-2xl font-black text-black uppercase md:text-4xl">LLM Finder</h1>
             <p className="text-text-muted text-xs md:text-sm">Compare and discover AI models across providers</p>
           </div>
-          <div className="hidden items-center gap-2 md:flex">
-            <Button id="btn-original-models-dev" asChild variant="primary" size="sm">
-              <a href="https://models.dev/" target="_blank" rel="noopener noreferrer">
-                Original: models.dev
+          <div className="flex items-center">
+            <Button id="btn-original-models-dev" asChild variant="primary" size="sm" className="gap-0.5">
+              <a href="https://github.com/vijayhardaha/findllm.vercel.app" target="_blank" rel="noopener noreferrer">
+                Github
                 <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
               </a>
             </Button>
