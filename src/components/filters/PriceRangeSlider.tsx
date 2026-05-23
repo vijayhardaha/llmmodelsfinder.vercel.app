@@ -8,6 +8,7 @@ import { Slider } from '@/components/ui/Slider';
  * Props for PriceRangeSlider component.
  *
  * @interface PriceRangeSliderProps
+ * @property {string} id - Unique identifier prefix for input elements.
  * @property {number} min - Minimum slider value.
  * @property {number} max - Maximum slider value.
  * @property {number} [step] - Slider step value.
@@ -18,6 +19,7 @@ import { Slider } from '@/components/ui/Slider';
  * @property {string} [label] - Label text.
  */
 interface PriceRangeSliderProps {
+  id: string;
   min: number;
   max: number;
   step?: number;
@@ -32,6 +34,8 @@ interface PriceRangeSliderProps {
  * Props for RangeInputs sub-component.
  *
  * @interface RangeInputsProps
+ * @property {string} inputId - Unique identifier prefix for input elements.
+ * @property {string} label - Label text for aria attributes.
  * @property {number} min - Minimum allowed value.
  * @property {number} max - Maximum allowed value.
  * @property {number} step - Input step value.
@@ -41,6 +45,8 @@ interface PriceRangeSliderProps {
  * @property {(value: number) => void} onMaxChange - Callback when max value changes.
  */
 interface RangeInputsProps {
+  inputId: string;
+  label: string;
   min: number;
   max: number;
   step: number;
@@ -56,7 +62,19 @@ interface RangeInputsProps {
  *
  * @returns {JSX.Element} Range input fields.
  */
-function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: RangeInputsProps): JSX.Element {
+function RangeInputs({
+  inputId,
+  label,
+  min,
+  max,
+  step,
+  draftValues,
+  onMinChange,
+  onMaxChange,
+}: RangeInputsProps): JSX.Element {
+  const minId = `${inputId}-min`;
+  const maxId = `${inputId}-max`;
+
   const handleMinChange = (e: ChangeEvent<HTMLInputElement>) => {
     onMinChange(parseFloat(e.target.value) || min);
   };
@@ -66,9 +84,9 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
   };
 
   return (
-    <div className="flex gap-2" id="range-inputs">
+    <div className="flex gap-2">
       <input
-        id="range-input-min"
+        id={minId}
         type="number"
         min={min}
         max={max}
@@ -76,11 +94,12 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
         value={draftValues[0]}
         onChange={handleMinChange}
         placeholder="Min"
+        aria-label={`${label} minimum`}
         className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
       />
       <span className="text-text-muted flex items-center px-2">-</span>
       <input
-        id="range-input-max"
+        id={maxId}
         type="number"
         min={min}
         max={max}
@@ -88,6 +107,7 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
         value={draftValues[1]}
         onChange={handleMaxChange}
         placeholder="Max"
+        aria-label={`${label} maximum`}
         className="flex-1 border-2 border-black bg-white px-2 py-1 text-sm focus:outline-none"
       />
     </div>
@@ -97,19 +117,12 @@ function RangeInputs({ min, max, step, draftValues, onMinChange, onMaxChange }: 
 /**
  * Price range slider component with min/max inputs.
  *
- * @param {number} min - Minimum slider value.
+ * @param {PriceRangeSliderProps} props - Component props.
  *
  * @returns {JSX.Element} Price range slider component.
- *
- * @property {number} max - Maximum slider value.
- * @property {number} [step] - Slider step value.
- * @property {(value: number) => void} onMinChange - Callback when min value changes.
- * @property {(value: number) => void} onMaxChange - Callback when max value changes.
- * @property {number} minValue - Current minimum value.
- * @property {number} maxValue - Current maximum value.
- * @property {string} [label] - Label text.
  */
 export function PriceRangeSlider({
+  id,
   min,
   max,
   step = 0.01,
@@ -150,7 +163,9 @@ export function PriceRangeSlider({
 
   return (
     <div className="space-y-3">
-      <label className="uppercase-label block text-black">{label}</label>
+      <label htmlFor={`${id}-min`} className="uppercase-label block text-black">
+        {label}
+      </label>
       <div className="pointer-events-auto">
         <Slider
           min={min}
@@ -170,6 +185,8 @@ export function PriceRangeSlider({
         />
       </div>
       <RangeInputs
+        inputId={id}
+        label={label}
         min={min}
         max={max}
         step={step}
