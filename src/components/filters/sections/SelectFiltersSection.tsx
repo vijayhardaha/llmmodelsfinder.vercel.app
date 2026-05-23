@@ -40,7 +40,7 @@ export function SelectFiltersSection({
   onFilterChange,
 }: SelectFiltersSectionProps): JSX.Element {
   return (
-    <div id="select-filters-section" className="grid grid-cols-1 gap-3 md:gap-4 lg:grid-cols-2">
+    <div id="select-filters-section" className="grid grid-cols-2 gap-3 md:gap-4">
       <FilterGroup label="Provider" id="provider-filter">
         <SearchableSelect
           id="provider-filter"

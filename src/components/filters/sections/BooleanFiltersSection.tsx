@@ -77,7 +77,7 @@ function renderBooleanSelect({
  */
 export function BooleanFiltersSection({ filters, onFilterChange }: BooleanFiltersSectionProps): JSX.Element {
   return (
-    <div id="boolean-filters-section" className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
+    <div id="boolean-filters-section" className="grid grid-cols-3 gap-3 md:gap-4">
       <FilterGroup label="Tool Call" id="tool-call-filter">
         {renderBooleanSelect({
           id: 'tool-call-filter',
